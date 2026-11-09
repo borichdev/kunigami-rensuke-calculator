@@ -492,6 +492,11 @@ public class MainActivity extends Activity {
                 renderer.model.triggerEasterEggPose("EASTER_50", 3.5f, 2.0f);
                 showVoiceBubble("⚽ #50! 俺はスーパーヒーローになる！ ⚽");
                 return true;
+            case "52":
+                soundEngine.playEasterEggVoice("ee_52");
+                renderer.model.triggerEasterEggPose("EASTER_52", 3.5f, 2.0f);
+                showVoiceBubble("🔥 52! ごじゅうに！ YEAH FIFTY-TWO!! 🖐️✌️");
+                return true;
             case "993":
                 soundEngine.playEasterEggVoice("ee_993");
                 renderer.model.triggerEasterEggPose("EASTER_993", 4.0f, 2.4f);

@@ -286,7 +286,7 @@ POSE_LIST = [
     "DIGIT_5", "DIGIT_6", "DIGIT_7", "DIGIT_8", "DIGIT_9",
     "OP_PLUS", "OP_MINUS", "OP_MUL", "OP_DIV",
     "EQUALS_EGO", "BACKSPACE", "CLEAR",
-    "EASTER_67_A", "EASTER_67_B", "EASTER_87", "EASTER_50", "EASTER_993"
+    "EASTER_67_A", "EASTER_67_B", "EASTER_87", "EASTER_50", "EASTER_993", "EASTER_52"
 ]
 
 def build_pose(name):
@@ -451,6 +451,15 @@ def build_pose(name):
         set_fingers('R', 0.6, 0.85, 0.15, 0.15, 0.15)
         aim_arm('L', (0.25, -0.62, -0.74), (-0.5, -0.8, 0.0), (-0.42, -0.32, 0.85), (0.0, -0.9, -0.4), (-0.55, -0.20, 0.81), (0.0, -0.95, -0.3))
         set_fingers('L', 0.5, 0.7, 0.7, 0.7, 0.7)
+    elif name == 'EASTER_52':
+        # "52" Swagger Pose: Right hand raised high showing '5', Left hand angled out showing '2' V-sign!
+        set_bone_world_rot('Spine2_M', -4, 0, 2)
+        set_bone_world_rot('Chest_M', -5, -3, 5)
+        set_bone_world_rot('Head_M', 5, -5, 4)
+        aim_arm('R', (-0.34, -0.30, -0.89), (0.35, -0.9, 0.0), (0.18, -0.35, 0.92), (0.0, -1.0, 0.1), (0.08, -0.08, 0.99), (0.0, -1.0, -0.1))
+        set_fingers('R', 0.0, 0.0, 0.0, 0.0, 0.0, spreads=(15, 6, -6, -15))
+        aim_arm('L', (0.32, -0.40, -0.86), (-0.35, -0.9, 0.0), (-0.28, -0.48, 0.83), (0.0, -1.0, 0.15), (-0.18, -0.15, 0.97), (0.0, -1.0, -0.1))
+        set_fingers('L', 0.95, 0.0, 0.0, 0.95, 0.98, spreads=(12, -12, 0, 0))
 
 all_pose_quats = []
 for pname in POSE_LIST:

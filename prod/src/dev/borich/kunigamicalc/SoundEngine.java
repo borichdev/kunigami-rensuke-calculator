@@ -24,7 +24,7 @@ public class SoundEngine {
     private static final String[] VOICE_KEYS = {
             "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9",
             "plus", "minus", "mul", "div", "equals", "bs", "clear", "dot", "percent", "sign",
-            "ee_67", "ee_87", "ee_50", "ee_993", "ee_777", "ee_69", "ee_420", "ee_666", "ee_1337", "ee_42", "ee_228", "ee_1488"
+            "ee_67", "ee_87", "ee_50", "ee_993", "ee_777", "ee_69", "ee_420", "ee_666", "ee_1337", "ee_42", "ee_228", "ee_1488", "ee_52"
     };
 
     private static final float[] DIGIT_FREQS = {
