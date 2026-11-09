@@ -1,0 +1,9 @@
+prod/bin/
+prod/build/
+*.idsig
+*.keystore
+assets_raw/
+kunigami.fbx
+kunigamitextures.rar
+refer.mp4
+prod/tools/*.blend

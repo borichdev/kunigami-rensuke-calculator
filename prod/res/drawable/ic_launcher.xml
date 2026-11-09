@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Deep obsidian-ember background -->
+    <path
+        android:fillColor="#140906"
+        android:pathData="M0,0h108v108h-108z" />
+
+    <!-- Outer tactical hexagon/pentagon glow ring -->
+    <path
+        android:fillColor="#240F08"
+        android:strokeColor="#66FF6B1A"
+        android:strokeWidth="1.5"
+        android:pathData="M54,10 L96,39 L80,91 L28,91 L12,39 Z" />
+
+    <!-- Blue Lock Pentagon core shield -->
+    <path
+        android:fillColor="#2D1209"
+        android:strokeColor="#FF6B1A"
+        android:strokeWidth="3.2"
+        android:pathData="M54,16 L90,41 L76,85 L32,85 L18,41 Z" />
+
+    <!-- SubtleKunigami spiky crown accent inside top of pentagon -->
+    <path
+        android:fillColor="#99FF6B1A"
+        android:pathData="M43,32 L48,25 L51,30 L54,22 L57,30 L60,25 L65,32 Z" />
+
+    <!-- Drop shadow under letters K C -->
+    <path
+        android:fillColor="#AA090302"
+        android:pathData="M29,40 L36,40 L36,52 L45,40 L53,40 L43,54 L54,72 L46,72 L36,57 L36,72 L29,72 Z M61,40 L79,40 L79,47 L65,47 L65,65 L79,65 L79,72 L61,72 L57,68 L57,44 Z" />
+
+    <!-- Bold Fiery Orange Letter 'K' -->
+    <path
+        android:fillColor="#FF6B1A"
+        android:strokeColor="#FFB366"
+        android:strokeWidth="0.9"
+        android:pathData="M28,38 L35,38 L35,50 L44,38 L52,38 L42,52 L53,70 L45,70 L35,55 L35,70 L28,70 Z" />
+
+    <!-- Bold Fiery Orange Letter 'C' -->
+    <path
+        android:fillColor="#FF7A1F"
+        android:strokeColor="#FFB366"
+        android:strokeWidth="0.9"
+        android:pathData="M60,38 L78,38 L78,45 L64,45 L64,63 L78,63 L78,70 L60,70 L56,66 L56,42 Z" />
+
+    <!-- Bottom striker accent bar -->
+    <path
+        android:fillColor="#FF8833"
+        android:pathData="M40,76 L68,76 L65,80 L43,80 Z" />
+</vector>
