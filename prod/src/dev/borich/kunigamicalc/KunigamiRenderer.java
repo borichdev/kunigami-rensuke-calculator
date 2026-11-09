@@ -181,25 +181,27 @@ public class KunigamiRenderer implements GLSurfaceView.Renderer {
             "    vec3 L = normalize(vec3(0.28, -0.88, 0.38));\n" +
             "    vec3 V = normalize(u_camPos - v_worldPos);\n" +
             "\n" +
-            "    // Soft anime face shading so face stays clean and crisp\n" +
+            "    // Soft anime face & hair shading so face and bangs stay clean, bright and crisp\n" +
             "    bool isFace = (u_flags & 1) != 0;\n" +
             "    bool isHair = (u_flags & 2) != 0;\n" +
             "    if (isFace) {\n" +
             "        N = normalize(mix(N, vec3(0.0, -0.94, 0.34), 0.68));\n" +
+            "    } else if (isHair) {\n" +
+            "        N = normalize(mix(N, vec3(0.0, -0.88, 0.46), 0.58));\n" +
             "    }\n" +
             "\n" +
             "    float ndotl = dot(N, L);\n" +
-            "    float cel = isFace ? smoothstep(-0.22, 0.02, ndotl) : smoothstep(-0.08, 0.06, ndotl);\n" +
+            "    float cel = (isFace || isHair) ? smoothstep(-0.24, 0.06, ndotl) : smoothstep(-0.08, 0.06, ndotl);\n" +
             "\n" +
             "    vec3 baseCol = colSample.rgb;\n" +
-            "    vec3 shadeCol = mix(baseCol * 0.78, sdwSample.rgb, 0.65);\n" +
+            "    vec3 shadeCol = isHair ? mix(baseCol * 0.86, sdwSample.rgb, 0.42) : mix(baseCol * 0.78, sdwSample.rgb, 0.65);\n" +
             "\n" +
             "    // Boost Kunigami's iconic fiery orange hair saturation and crown-to-tips gradient\n" +
             "    if (isHair) {\n" +
             "        float crownGrad = clamp((v_worldPos.z - 1.66) / 0.24, 0.0, 1.0);\n" +
-            "        vec3 hairTint = mix(vec3(1.08, 0.76, 0.56), vec3(1.14, 0.90, 0.70), crownGrad);\n" +
+            "        vec3 hairTint = mix(vec3(1.10, 0.80, 0.58), vec3(1.15, 0.92, 0.72), crownGrad);\n" +
             "        baseCol *= hairTint;\n" +
-            "        shadeCol *= vec3(1.06, 0.72, 0.54);\n" +
+            "        shadeCol *= vec3(1.08, 0.78, 0.58);\n" +
             "    }\n" +
             "\n" +
             "    vec3 lit = mix(shadeCol, baseCol, cel);\n" +
@@ -250,7 +252,9 @@ public class KunigamiRenderer implements GLSurfaceView.Renderer {
             "    vec4 wp = skin * vec4(a_pos, 1.0);\n" +
             "    vec3 wn = normalize(mat3(skin) * a_norm);\n" +
             "    wp.xyz += wn * u_outlineWidth;\n" +
-            "    gl_Position = u_mvp * wp;\n" +
+            "    vec4 clipPos = u_mvp * wp;\n" +
+            "    clipPos.z += 0.0022 * clipPos.w;\n" +
+            "    gl_Position = clipPos;\n" +
             "}\n";
 
     private static final String OUTLINE_FRAG =

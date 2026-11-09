@@ -104,24 +104,58 @@ def enhance_sharp_details(img_path, contrast=1.06, sharpness=130):
     a = img.split()[3]
     Image.merge("RGBA", (r, g, b, a)).save(img_path)
 
-def bake_hair_highlights(hair_col_path, hair_sh_path):
+def bake_hair_highlights(hair_col_path, hair_sdw_path, hair_sh_path):
     col_img = Image.open(hair_col_path).convert("RGBA")
+    sdw_img = Image.open(hair_sdw_path).convert("RGBA")
     w, h = col_img.size
     sh_img = Image.open(hair_sh_path).convert("RGBA").resize((w, h), Image.Resampling.BILINEAR)
     c_px = col_img.load()
+    d_px = sdw_img.load()
     s_px = sh_img.load()
+
+    # Base vibrant Kunigami orange & soft warm shadow orange (no black or muddy brown!)
+    base_orange = (246.0, 166.0, 76.0)
+    soft_shade_orange = (224.0, 134.0, 56.0)
+    sdw_tex_orange = (212.0, 122.0, 48.0)
+
     for y in range(h):
         for x in range(w):
+            cr, cg, cb, ca = c_px[x, y]
+            lum = 0.299 * cr + 0.587 * cg + 0.114 * cb
+            # If pixel is dark/black stripe or dark brown bang shadow, lift it to warm fiery orange
+            if lum < 175.0:
+                t = max(0.0, min(1.0, (lum - 40.0) / 135.0))
+                # Even the darkest part becomes warm soft_shade_orange instead of black/muddy brown
+                mix_f = 0.35 + 0.65 * t
+                cr = int(soft_shade_orange[0] * (1.0 - mix_f * 0.5) + base_orange[0] * (mix_f * 0.5))
+                cg = int(soft_shade_orange[1] * (1.0 - mix_f * 0.5) + base_orange[1] * (mix_f * 0.5))
+                cb = int(soft_shade_orange[2] * (1.0 - mix_f * 0.5) + base_orange[2] * (mix_f * 0.5))
+
             sr, sg, sb, _ = s_px[x, y]
             diff = sg - sr
             if diff > 10:
                 streak = min(1.0, (diff - 10.0) / 85.0)
-                cr, cg, cb, ca = c_px[x, y]
-                nr = min(255, int(cr + 78.0 * streak))
-                ng = min(255, int(cg + 58.0 * streak))
-                nb = min(255, int(cb + 24.0 * streak))
-                c_px[x, y] = (nr, ng, nb, ca)
+                cr = min(255, int(cr + 72.0 * streak))
+                cg = min(255, int(cg + 54.0 * streak))
+                cb = min(255, int(cb + 22.0 * streak))
+            c_px[x, y] = (cr, cg, cb, ca)
+
+            # Also ensure hair shadow map has zero black stripes and uses soft warm orange shade
+            dr, dg, db, da = d_px[x, y]
+            dlum = 0.299 * dr + 0.587 * dg + 0.114 * db
+            if dlum < 150.0:
+                dt = max(0.0, min(1.0, dlum / 150.0))
+                dr = int(sdw_tex_orange[0] * (0.88 + 0.12 * dt))
+                dg = int(sdw_tex_orange[1] * (0.88 + 0.12 * dt))
+                db = int(sdw_tex_orange[2] * (0.88 + 0.12 * dt))
+            else:
+                dr = int(dr * 0.35 + sdw_tex_orange[0] * 0.65)
+                dg = int(dg * 0.35 + sdw_tex_orange[1] * 0.65)
+                db = int(db * 0.35 + sdw_tex_orange[2] * 0.65)
+            d_px[x, y] = (dr, dg, db, da)
+
     col_img.save(hair_col_path)
+    sdw_img.save(hair_sdw_path)
 
 def main():
     for fname, scale in TEXTURES:
@@ -138,9 +172,10 @@ def main():
             print(f"Upgraded {fname:32s} -> {im.size[0]}x{im.size[1]}")
     bake_hair_highlights(
         os.path.join(OUT_DIR, "T_CH003002_hair_col.png"),
+        os.path.join(OUT_DIR, "T_CH003002_hair_sdw.png"),
         os.path.join(OUT_DIR, "T_CH003002_hair_sh.png")
     )
-    print("Baked anime hair highlights from T_CH003002_hair_sh.png into T_CH003002_hair_col.png")
+    print("Recolored dark hair shadows/stripes to soft fiery orange & baked highlights")
 
 if __name__ == "__main__":
     main()

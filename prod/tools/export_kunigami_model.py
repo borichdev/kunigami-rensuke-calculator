@@ -517,14 +517,22 @@ for obj_name in MESH_ORDER:
     mw = obj.matrix_world
     mw_norm = mw.to_3x3().inverted().transposed()
 
-    # Step A: Group co-located vertices to weld split UV/material seam normals
+    # Step A: Compute true geometric vertex normals from triangle face normals so back-faces never have inverted normals
+    raw_wp = [mw @ v.co for v in mesh.vertices]
+    geom_accum = [Vector((0.0, 0.0, 0.0)) for _ in mesh.vertices]
+    for tri in mesh.loop_triangles:
+        v0, v1, v2 = tri.vertices
+        fn = (raw_wp[v1] - raw_wp[v0]).cross(raw_wp[v2] - raw_wp[v0])
+        geom_accum[v0] += fn
+        geom_accum[v1] += fn
+        geom_accum[v2] += fn
+
     pos_groups = {}
-    raw_wp = []
     raw_wn = []
     for v in mesh.vertices:
-        wp = mw @ v.co
-        wn = (mw_norm @ v.normal).normalized()
-        raw_wp.append(wp)
+        wp = raw_wp[v.index]
+        gn = geom_accum[v.index]
+        wn = gn.normalized() if gn.length > 1e-7 else (mw_norm @ v.normal).normalized()
         raw_wn.append(wn)
         pkey = (round(wp.x, 4), round(wp.y, 4), round(wp.z, 4))
         pos_groups.setdefault(pkey, []).append(v.index)
@@ -537,7 +545,7 @@ for obj_name in MESH_ORDER:
         acc_n = Vector((0.0, 0.0, 0.0))
         for other_vi in pos_groups[pkey]:
             other_n = raw_wn[other_vi]
-            if wn_own.dot(other_n) > 0.20:
+            if wn_own.dot(other_n) > 0.35:
                 acc_n += other_n
         geom_n = acc_n.normalized() if acc_n.length > 1e-5 else wn_own
         shade_n = compute_shading_normal(obj_name, wp, geom_n)
