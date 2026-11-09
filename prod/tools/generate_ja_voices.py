@@ -23,7 +23,7 @@ CLIPS = {
     "div": "わる",
     "equals": "はっ！答えが出たぜ！",
     "bs": "消す、消す！",
-    "clear": "リセットだ！",
+    "clear": ("ru", "Кунигири канон!"),
     "dot": "てん",
     "percent": "パーセント",
     "sign": "マイナス",
@@ -42,10 +42,11 @@ CLIPS = {
     "ee_52": "ごじゅうに！ イェーイ、フィフティ・ツー！",
 }
 
-for name, text in CLIPS.items():
+for name, val in CLIPS.items():
+    lang, text = val if isinstance(val, tuple) else ("ja", val)
     raw_path = f"/tmp/raw_{name}.mp3"
     out_path = os.path.join(VOICE_DIR, f"{name}.mp3")
-    url = "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=" + urllib.parse.quote(text)
+    url = f"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl={lang}&q=" + urllib.parse.quote(text)
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     data = urllib.request.urlopen(req, timeout=15).read()
     with open(raw_path, "wb") as f:

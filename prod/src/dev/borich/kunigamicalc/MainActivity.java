@@ -642,9 +642,9 @@ public class MainActivity extends Activity {
                 break;
             case "C":
                 pose = "CLEAR";
-                voiceLine = "「 リセットだ！ [C] 」";
+                voiceLine = "「 Кунигири — канон! [C] 」";
                 animDur = 0.28f;
-                speechDur = 0.65f;
+                speechDur = 1.35f;
                 break;
             case ".":
                 pose = "DIGIT_1";
